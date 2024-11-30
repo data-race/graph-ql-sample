@@ -6,7 +6,6 @@ namespace SimpleGraphQLServer.Models
     public class Book
     {
         [GraphQLDescription("The unique identifier of the book")]
-        [ID]
         public int Id { get; set; }
 
         [GraphQLDescription("The title of the book")]
@@ -31,6 +30,17 @@ namespace SimpleGraphQLServer.Models
     {
         protected override void Configure(IObjectTypeDescriptor<Book> descriptor)
         {
+            descriptor.Field(t => t.Id)
+                .Type<NonNullType<IdType>>();
+
+            descriptor.Field(t => t.Title)
+                .Type<NonNullType<StringType>>();
+            
+            descriptor.Field(t => t.Rating)
+                .Type<NonNullType<FloatType>>();
+            
+            descriptor.Field(t => t.AuthorId).Ignore();
+
             descriptor.Field(b=>b.Author)
                 .Resolve(context => {
                     Book book = context.Parent<Book>();

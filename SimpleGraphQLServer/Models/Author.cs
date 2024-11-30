@@ -20,4 +20,19 @@ namespace SimpleGraphQLServer.Models
             Age = age;
         }
     }
+
+    public class AuthorType: ObjectType<Author>
+    {
+        protected override void Configure(IObjectTypeDescriptor<Author> descriptor)
+        {
+            descriptor.Field(t => t.Id)
+                .Type<NonNullType<IdType>>();
+
+            descriptor.Field(t => t.Name)
+                .Type<NonNullType<StringType>>();
+
+            descriptor.Field(t => t.Age)
+                .Type<NonNullType<IntType>>();
+        }
+    }
 }
