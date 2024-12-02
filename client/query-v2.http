@@ -1,0 +1,66 @@
+### Get all books
+POST http://localhost:5023/graphql/book
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+    books {
+        id
+        title
+        rating
+        author {
+            name
+            age
+        }
+    }
+}
+
+
+### Get book by id
+POST http://localhost:5023/graphql/book
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+    book(id: 1) {
+        id
+        title
+        rating
+        author {
+            name
+            age
+        }
+    }
+}
+
+### Get book with rating greater than 3.8
+POST http://localhost:5023/graphql/book
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+    booksWithRatingGreaterThan(rating: 3.8) {
+        title
+        rating
+        author {
+            name
+            age
+        }
+    }
+}
+
+###
+POST http://localhost:5023/graphql/author
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+    author (id: 1) {
+        name
+        age
+        books {
+            title
+            rating
+        }
+    }
+}

@@ -1,0 +1,12 @@
+type Book {
+    id: ID!
+    title: String!
+    rating: float!
+    author: Author!
+}
+
+type Query {
+    books: [Book!]!
+    book(id: ID!): Book
+    booksWithRatingGreaterThan(rating: Float!): [Book!]!
+}
