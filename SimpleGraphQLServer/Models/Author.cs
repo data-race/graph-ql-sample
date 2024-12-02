@@ -35,4 +35,18 @@ namespace SimpleGraphQLServer.Models
                 .Type<NonNullType<IntType>>();
         }
     }
+
+    public class AuthorDataLoader : BatchDataLoader<int, Author>
+    {
+        public AuthorDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions? options = null)
+            : base(batchScheduler, options)
+        {
+        }
+
+        protected override async Task<IReadOnlyDictionary<int, Author>> LoadBatchAsync(IReadOnlyList<int> keys, CancellationToken cancellationToken)
+        {
+            Console.WriteLine($"Loading authors by ids: {string.Join(", ", keys)}");
+            return QueryHelper.AuthorsByIds(keys);
+        }
+    }
 }

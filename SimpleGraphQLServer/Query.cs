@@ -109,4 +109,27 @@ public static class QueryHelper {
 
         return null;
     }
+
+    public static IReadOnlyDictionary<int, Author> AuthorsByIds(IEnumerable<int> ids)
+    {
+        using var connection = new SQLiteConnection(connectionString);
+        connection.Open();
+
+        using var command = new SQLiteCommand(connection);
+        command.CommandText = "SELECT * FROM Authors WHERE Id IN (" + string.Join(",", ids) + ")";
+
+        using var reader = command.ExecuteReader();
+        var authors = new Dictionary<int, Author>();
+        while (reader.Read())
+        {
+            var author = new Author(
+                reader.GetInt32(0),
+                reader.GetString(1),
+                reader.GetInt32(2)
+            );
+            authors.Add(author.Id, author);
+        }
+
+        return authors;
+    }
 }

@@ -33,21 +33,6 @@ query {
     }
 }
 
-### Get book by id
-POST http://localhost:5204/graphql
-Content-Type: application/json
-X-REQUEST-TYPE: GraphQL
-
-query {
-    bookById(id: 2) {
-        title
-        author {
-            name
-            age
-        }
-    }
-}
-
 ### Get book with rating greater than 3.8
 POST http://localhost:5204/graphql
 Content-Type: application/json
@@ -57,5 +42,9 @@ query {
     booksWithRatingGreaterThan(rating: 3.8) {
         title
         rating
+        author {
+            name
+            age
+        }
     }
 }

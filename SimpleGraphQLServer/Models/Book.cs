@@ -30,22 +30,22 @@ namespace SimpleGraphQLServer.Models
     {
         protected override void Configure(IObjectTypeDescriptor<Book> descriptor)
         {
-            descriptor.Field(t => t.Id)
-                .Type<NonNullType<IdType>>();
-
-            descriptor.Field(t => t.Title)
-                .Type<NonNullType<StringType>>();
-            
-            descriptor.Field(t => t.Rating)
-                .Type<NonNullType<FloatType>>();
-            
-            descriptor.Field(t => t.AuthorId).Ignore();
-
-            descriptor.Field(b=>b.Author)
+            descriptor.Field(t => t.Id).Name("id").Type<NonNullType<IdType>>();
+            descriptor.Field(t => t.Title).Name("title").Type<NonNullType<StringType>>();
+            descriptor.Field(t => t.Rating).Name("rating").Type<NonNullType<FloatType>>();
+            descriptor.Field(t => t.AuthorId).Name("authorId").Ignore();
+            // descriptor.Field(b=>b.Author).Name("author")
+            //     .Resolve(context => {
+            //         Book book = context.Parent<Book>();
+            //         Console.WriteLine($"Resolving author for book {book.Id}");
+            //         return QueryHelper.AuthorById(book.AuthorId);
+            //     });
+            descriptor.Field(b=>b.Author).Name("author")
                 .Resolve(context => {
                     Book book = context.Parent<Book>();
-                    return QueryHelper.AuthorById(book.AuthorId);
+                    return context.DataLoader<AuthorDataLoader>().LoadAsync(book.AuthorId, context.RequestAborted);
                 });
         }
+
     }
 }
